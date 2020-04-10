@@ -1,0 +1,560 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is swagger",
+        "version": "1.0.0",
+        "title": "Swagger Employee Attendance & List"
+    },
+    "tags": [
+        {
+            "name": "Employee",
+            "description": "Everything about employee"
+        },
+        {
+            "name": "Attendance",
+            "description": "Everything about employee's attendance"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "paths": {
+        "/auth": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Returns Staff's Data ",
+                "operationId": "get-staff",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "description": "Google ID to find in database",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkerAuth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Operation",
+                        "schema": {
+                            "$ref": "#/definitions/AuthResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid Google ID"
+                    },
+                    "404": {
+                        "description": "Google ID not found"
+                    }
+                }
+            }
+        },
+        "/myProfile": {
+            "get": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Returns all employee's data",
+                "operationId": "get-employees",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful Operation",
+                        "schema": {
+                            "$ref": "#/definitions/ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Employee not found"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Creates new employee data",
+                "operationId": "add-employee",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Employee's data added to the database",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkerPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Operation",
+                        "schema": {
+                            "$ref": "#/definitions/ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Employee not found"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/myProfile?id=": {
+            "get": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Returns an employee's data by Id",
+                "operationId": "get-employee-by-id",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "description": "id of employee",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Operation",
+                        "schema": {
+                            "$ref": "#/definitions/ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Employee not found"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Update an existing employee",
+                "description": "",
+                "operationId": "update-employee",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "description": "employee's id that their data needs to be updated",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "new employee's data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkerUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description":"Successful Operation",
+                        "schema":{
+                            "$ref": "#/definitions/ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "ID not found"
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:products",
+                            "read:products"
+                        ]
+                    },
+                    {
+                        "JWT": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Deletes an employee",
+                "description": "",
+                "operationId": "delete-employee",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "description": "employee's ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description":"Employee with id={ID} has been removed"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "ID not found"
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:products",
+                            "read:products"
+                        ]
+                    },
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/scan?id=": {
+            "get": {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Find employee by id with scan",
+                "operationId": "get-employee-scan",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "description": "id of employee",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Operation",
+                        "schema": {
+                            "$ref": "#/definitions/ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "ID not found"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/listAbsensi?tanggal=": {
+            "get": {
+                "tags": [
+                    "Attendance"
+                ],
+                "summary": "Find attendance by tanggal",
+                "operationId": "get-absent",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "tanggal",
+                        "description": "yyyy-mm-dd | example: 2020-12-23 or 20200403",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returning an array of objects containing when someone attend"
+                    },
+                    "400": {
+                        "description": "Invalid Tanggal supplied"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/absensiSubmit?id=": {
+            "post": {
+                "tags": [
+                    "Attendance"
+                ],
+                "summary": "Submit attendance by employee's ID",
+                "operationId": "post-absent",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "description": "id of worker to add his/her attendance",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Submit Absen Berhasil"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "ID not found"
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        }
+    },
+    "securityDefinitions": {
+        "petstore_auth": {
+            "type": "oauth2",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify products in your account",
+                "read:pets": "read your products"
+            }
+        },
+        "JWT": {
+            "type": "apiKey",
+            "name": "authorization",
+            "in": "header"
+        }
+    },
+    "definitions": {
+        "WorkerUpdate": {
+            "type": "object",
+            "required": [
+                "name",
+                "photoUrls"
+            ],
+            "properties": {
+                "firstName": {
+                    "type": "string",
+                    "example": "Nama Ralat"
+                },
+                "birthPlace": {
+                    "type": "string",
+                    "example": "Tempat Ralat"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Jabatan Ralat"
+                }
+            },
+            "xml": {
+                "name": "Product"
+            }
+        },
+        "WorkerPost": {
+            "type": "object",
+            "required": [
+                "name",
+                "photoUrls"
+            ],
+            "properties": {
+                "photo": {
+                    "type": "string",
+                    "example": "base64encode"
+                },
+                "firstName": {
+                    "type": "string",
+                    "example": "Koala"
+                },
+                "lastName": {
+                    "type": "string",
+                    "example": "Light"
+                },
+                "birthPlace": {
+                    "type": "string",
+                    "example": "Bandung"
+                },
+                "birthDate": {
+                    "type": "string",
+                    "example": "2000-03-29"
+                },
+                "bloodType": {
+                    "type": "string",
+                    "example": "AB"
+                },
+                "address": {
+                    "type": "string",
+                    "example": "Jl.Kayu"
+                },
+                "salary": {
+                    "type": "integer",
+                    "example": 4500000
+                },
+                "phoneNumber": {
+                    "type": "string",
+                    "example": "089712341235"
+                },
+                "dept": {
+                    "type": "string",
+                    "example": "Perikanan"
+                },
+                "simperIdCard": {
+                    "type": "integer",
+                    "example": 165215
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Manajer"
+                }
+            },
+            "xml": {
+                "name": "Product"
+            }
+        },
+        "ApiResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "birthPlace": {
+                    "type": "string"
+                },
+                "birthDate": {
+                    "type": "string"
+                },
+                "bloodType": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "salary": {
+                    "type": "integer"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "dept": {
+                    "type": "string"
+                },
+                "simperIdCard": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "WorkerAuth": {
+            "type": "object",
+            "properties": {
+                "userName": {
+                    "type": "string",
+                    "example": "kipas"
+                },
+                "userPassword": {
+                    "type": "string",
+                    "example": "jeruk123"
+                }
+            }
+        },
+        "AuthResponse": {
+            "type": "object",
+            "properties": {
+                "userName": {
+                    "type": "string",
+                    "example": "kipas"
+                },
+                "userPassword": {
+                    "type": "string",
+                    "example": "jeruk123"
+                }
+            }
+        }
+    }
+}
