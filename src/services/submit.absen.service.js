@@ -18,7 +18,8 @@ class SubmitAbsenService {
 
                 if (employeePresent) {
                     if (employeePresent.jamKeluar) {
-                        throw new Error("Sudah Absen Keluar");
+                        // throw new Error("Sudah Absen Keluar");
+                        continue;
                     } else {
                         data.jamKeluar = data.jam || dateFormat(new Date(), 'HH:MM:ss');
                         if (employeePresent.jamMasuk < data.jamKeluar) {

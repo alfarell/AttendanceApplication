@@ -3,18 +3,18 @@ const getEmployeeInformation = async (req, res, service) => {
         let result;
         const history = req.query.history;
         const id = req.query.id;
+        const name = req.query.name;
         if (id) {
             result = await service.getInformationById(id);
-            result ? res.status(200).json(result) : res.status(404).json('ID Not Found')
         } else if (history) {
             result = await service.syncInformation(history);
-            res.status(200);
-            res.json(result);
+        } else if (name) {
+            result = await service.getInformationByName(name);
         } else {
             result = await service.getAllInformation();
-            res.status(200);
-            res.json(result);
         }
+        res.status(200);
+        res.json(result);
     } catch (e) {
         res.status(500);
         res.json(e.message);

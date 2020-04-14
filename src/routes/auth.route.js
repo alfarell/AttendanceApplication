@@ -8,8 +8,9 @@ const PersonalInfo = require('../models/personal.info.model');
 const ContactInfo = require('../models/contact.info.model');
 const WorkInfo = require('../models/work.info.model');
 const Address = require('../models/address.model');
+const Admin = require('../models/admin.model');
 
-const authService = new AuthService(Staff,PersonalInfo,ContactInfo,WorkInfo,Address);
+const authService = new AuthService(Staff,PersonalInfo,ContactInfo,WorkInfo,Address,Admin);
 
 router.post('/',(req,res,next)=>userAuthentication(req,res,authService));
 

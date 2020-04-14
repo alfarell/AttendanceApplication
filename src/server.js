@@ -1,6 +1,6 @@
 const http = require('http');
 const express = require('express');
-const socket = require('socket.io');
+const socketIo = require('socket.io');
 const appMiddlewares = require('./middlewares/app-middleware');
 const appRoutes = require('./routes/index.js');
 const logEvent = require('./events/myEmitter')
@@ -13,20 +13,19 @@ app.use(appRoutes);
 
 const server = http.createServer(app);
 
-const io = socket(server)
+const io = socketIo(server)
 io.on('connect', function (socket) {
-    console.log("Made Socket Connection" + socket.id);
+    logEvent.emit('APP-INFO',{
+        logTitle: 'SOCKET',
+        logMessage: `Made Socket Connection ${socket.id}`
+    });
 
     socket.on('test', function (data) {
         console.log(data);
     });
 
-    socket.on('/test', function (msg) {
-        console.log(msg);
-    });
-
-    socket.on('disconnect', function (socket) {
-        console.log("DC" + socket);
+    socket.on('disconnect', function () {
+        console.log("DC");
     })
 });
 

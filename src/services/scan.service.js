@@ -14,11 +14,11 @@ class ScanService {
         let result;
         try {
             result = await this.employee.findOne({
-                attributes: { exclude: ['personalInfoId', 'contactInfoId', 'workInfoId', 'createdAt', 'updatedAt', 'deletedAt'] },
+                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
                 include: [
                     {
                         model: this.personalInfo,
-                        attributes: { exclude: ['addressId', 'createdAt', 'updatedAt', 'deletedAt'] },
+                        attributes: { exclude: [ 'createdAt', 'updatedAt', 'deletedAt'] },
                         include: [
                             {
                                 model: this.address,
@@ -51,11 +51,11 @@ class ScanService {
         let result;
         try {
             result = await this.employee.findOne({
-                attributes: { exclude: ['personalInfoId', 'contactInfoId', 'workInfoId', 'createdAt', 'updatedAt', 'deletedAt'] },
+                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
                 include: [
                     {
                         model: this.personalInfo,
-                        attributes: { exclude: ['addressId', 'createdAt', 'updatedAt', 'deletedAt'] },
+                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
                         include: [
                             {
                                 model: this.address,

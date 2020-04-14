@@ -1,32 +1,36 @@
 const Sequelize = require('sequelize');
 const connection = require('../../config/dbConn');
 
-const PersonalInfo = connection.define('personalInfo',{
-    id:{
+const PersonalInfo = connection.define('personalInfo', {
+    id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV1,
-        allowNull:false,
+        allowNull: false,
         primaryKey: true
     },
-    photo:{
-        type:Sequelize.STRING,
-    },
-    name:{
+    photo: {
         type: Sequelize.STRING,
-        allowNull:false,
     },
-    birthPlace:{
+    name: {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    birthDate:{
-        type:Sequelize.DATEONLY,
+    gender: {
+        type: Sequelize.ENUM('Male', 'Female'),
         allowNull: false,
     },
-    bloodType:{
-        type:Sequelize.STRING
+    birthPlace: {
+        type: Sequelize.STRING,
+        allowNull: false,
     },
-},{
+    birthDate: {
+        type: Sequelize.DATEONLY,
+        allowNull: false,
+    },
+    bloodType: {
+        type: Sequelize.ENUM('A', 'B', 'AB', 'O')
+    },
+}, {
     freezeTableName: true,
     tableName: 'personal_info',
     paranoid: true,

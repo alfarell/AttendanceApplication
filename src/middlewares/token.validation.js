@@ -1,11 +1,10 @@
-// const jwt = require('jsonwebtoken');
-const Staff = require('../models/staff.model');
+const ContactInfo = require('../models/contact.info.model');
 
 const tokenValidation = async (req, res, next) => {
     const { authorization } = req.headers;
     if (authorization) {
-        const checking = await Staff.findOne({ 
-            where: { googleId: authorization } 
+        const checking = await ContactInfo.findOne({
+            where: { email: authorization }
         });
         if (checking) {
             next();

@@ -13,6 +13,7 @@ const ContactInfo = connection.define('contactInfo',{
     },
     email: {
         type: Sequelize.STRING,
+        unique: true,
         validate: {
             isEmail: true,
         },

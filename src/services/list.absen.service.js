@@ -12,7 +12,6 @@ class ListAbsenService {
 
     async getEmployeeAbsensi(id) {
         let result;
-        console.log(id);
         try {
             result = await this.present.findAll({
                 where:
@@ -30,7 +29,7 @@ class ListAbsenService {
         return result;
     }
 
-    async getListAbsensi(tanggal) {
+    async getListAbsensiByDate(tanggal) {
         let result;
         try {
             result = await this.present.findAll({
@@ -42,11 +41,101 @@ class ListAbsenService {
                 include: [
                     {
                         model: this.employee,
-                        attributes: { exclude: ['personalInfoId', 'contactInfoId', 'workInfoId', 'createdAt', 'updatedAt', 'deletedAt'] },
+                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
                         include: [
                             {
                                 model: this.personalInfo,
-                                attributes: { exclude: ['addressId', 'createdAt', 'updatedAt', 'deletedAt'] },
+                                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                                include: [
+                                    {
+                                        model: this.address,
+                                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+                                    }
+                                ]
+                            },
+                            {
+                                model: this.contactInfo,
+                                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                            },
+                            {
+                                model: this.workInfo,
+                                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                            }
+                        ]
+                    },
+                ],
+            });
+        } catch (e) {
+            logEvent.emit('APP-ERROR', {
+                logTitle: 'GET-ATTENDANCE-SERVICE-FAILED',
+                logMessage: e
+            });
+            throw new Error(e);
+        }
+        return result;
+    }
+
+    async getAbsensiByIdAndDate(id, tanggal) {
+        let result;
+        try {
+            result = await this.present.findOne({
+                where:
+                {
+                    tanggal: tanggal,
+                    employeeId: id
+                },
+                attributes: { exclude: ['employeeId'] },
+                include: [
+                    {
+                        model: this.employee,
+                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                        include: [
+                            {
+                                model: this.personalInfo,
+                                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                                include: [
+                                    {
+                                        model: this.address,
+                                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+                                    }
+                                ]
+                            },
+                            {
+                                model: this.contactInfo,
+                                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                            },
+                            {
+                                model: this.workInfo,
+                                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                            }
+                        ]
+                    },
+                ],
+            });
+        } catch (e) {
+            logEvent.emit('APP-ERROR', {
+                logTitle: 'GET-ATTENDANCE-SERVICE-FAILED',
+                logMessage: e
+            });
+            throw new Error(e);
+        }
+        return result;
+    }
+
+    async getAllList() {
+        let result;
+        try {
+            result = await this.present.findAll({
+                attributes: { exclude: ['employeeId'] },
+                order: [['tanggal', 'ASC']],
+                include: [
+                    {
+                        model: this.employee,
+                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                        include: [
+                            {
+                                model: this.personalInfo,
+                                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
                                 include: [
                                     {
                                         model: this.address,

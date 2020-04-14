@@ -1,11 +1,22 @@
 const userAuthentication = async (req, res, service) => {
-    const id = req.query.id;
-    const img = req.body.img;
+    const email = req.query.email;
+    let user;
     try {
-        console.log(id,img);
-        const staffInfo = await service.authenticate(id,img);
-        res.status(200);
-            res.json(staffInfo);
+        if (email) {
+            user = await service.authenticate(email, req.body.img);
+        } else {
+            user = await service.authAdmin(req.body);
+        }
+
+        if (user) {
+            res.status(200);
+            res.json(user);
+        } else {
+            res.status(200);
+            res.json({
+                message: "Unauthorized"
+            })
+        }
     } catch (e) {
         res.status(500);
         res.json(e.message)

@@ -2,7 +2,7 @@ const logEvent = require('../events/myEmitter');
 const sequelize = require('../../config/dbConn');
 const { Op } = require('sequelize');
 const dateFormat = require('dateformat');
-const tanggal = dateFormat(new Date(), 'yyyy-mm-dd');
+const now = dateFormat(new Date(), 'yyyy-mm-dd');
 
 class EmployeeService {
     constructor(employee, personalInfo, contactInfo, workInfo, address, history, tanggal) {
@@ -56,11 +56,50 @@ class EmployeeService {
         let result;
         try {
             result = await this.employee.findByPk(id, {
-                attributes: { exclude: ['personalInfoId', 'contactInfoId', 'workInfoId', 'createdAt', 'updatedAt', 'deletedAt'] },
+                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
                 include: [
                     {
                         model: this.personalInfo,
-                        attributes: { exclude: ['addressId', 'createdAt', 'updatedAt', 'deletedAt'] },
+                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                        include: [
+                            {
+                                model: this.address,
+                                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+                            }
+                        ]
+                    },
+                    {
+                        model: this.contactInfo,
+                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                    },
+                    {
+                        model: this.workInfo,
+                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                    }
+                ]
+            });
+        } catch (e) {
+            logEvent.emit('APP-ERROR', {
+                logTitle: 'GET-EMPLOYEE-SERVICE-FAILED',
+                logMessage: e
+            });
+            throw new Error(e);
+        }
+        return result;
+    }
+
+    async getInformationByName(name) {
+        let result;
+        try {
+            result = await this.employee.findAll({
+                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                include: [
+                    {
+                        model: this.personalInfo,
+                        where: {
+                            name: { [Op.like]: `%${name}%` }
+                        },
+                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
                         include: [
                             {
                                 model: this.address,
@@ -96,15 +135,15 @@ class EmployeeService {
                 include: [
                     {
                         model: this.history,
-                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt', 'employeeId', 'tanggalId'] },
+                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt', 'tanggalId'] },
                         include: [
                             {
                                 model: this.employee,
-                                attributes: { exclude: ['personalInfoId', 'contactInfoId', 'workInfoId', 'createdAt', 'updatedAt', 'deletedAt'] },
+                                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
                                 include: [
                                     {
                                         model: this.personalInfo,
-                                        attributes: { exclude: ['addressId', 'createdAt', 'updatedAt', 'deletedAt'] },
+                                        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
                                         include: [
                                             {
                                                 model: this.address,
@@ -154,7 +193,7 @@ class EmployeeService {
 
             let last = await this.tanggal.findOne(
                 {
-                    where: { tanggal: tanggal }
+                    where: { tanggal: now }
                 }
             );
 
@@ -162,7 +201,7 @@ class EmployeeService {
             if (last) {
                 history.setTanggal(last)
             } else {
-                let newLast = await this.tanggal.create({ tanggal: tanggal }, { transaction: trx });
+                let newLast = await this.tanggal.create({ tanggal: now }, { transaction: trx });
                 history.setTanggal(newLast);
             }
 
@@ -216,7 +255,7 @@ class EmployeeService {
 
                 let last = await this.tanggal.findOne(
                     {
-                        where: { tanggal: tanggal }
+                        where: { tanggal: now }
                     }
                 );
 
@@ -226,7 +265,7 @@ class EmployeeService {
                 if (last) {
                     history.setTanggal(last)
                 } else {
-                    let newLast = await this.tanggal.create({ tanggal: tanggal }, { transaction: trx });
+                    let newLast = await this.tanggal.create({ tanggal: now }, { transaction: trx });
                     history.setTanggal(newLast);
                 }
 

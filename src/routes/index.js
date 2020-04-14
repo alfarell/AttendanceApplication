@@ -21,5 +21,4 @@ router.use('/listAbsensi',listAbsensiRoutes);
 router.use('/absensiSubmit',absensiSubmitRoutes);
 router.use(noRoute);
 
-
 module.exports = router;
